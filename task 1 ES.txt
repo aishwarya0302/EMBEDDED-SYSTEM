@@ -1,0 +1,29 @@
+const int buttonPin = 2;      // Pin where the button is connected
+int counter = 0;              // Counter variable
+int lastButtonState = LOW;   // Previous state of the button
+unsigned long lastDebounceTime = 0;
+unsigned long debounceDelay = 50;  // milliseconds
+
+void setup() {
+  pinMode(buttonPin, INPUT);        // Set button pin as input
+  Serial.begin(9600);               // Start serial communication
+}
+
+void loop() {
+  int reading = digitalRead(buttonPin);
+
+  // Simple debounce logic
+  if (reading != lastButtonState) {
+    lastDebounceTime = millis();
+  }
+
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    if (reading == HIGH && lastButtonState == LOW) {
+      counter++;
+      Serial.print("Button pressed. Count: ");
+      Serial.println(counter);
+    }
+  }
+
+  lastButtonState = reading;
+}
